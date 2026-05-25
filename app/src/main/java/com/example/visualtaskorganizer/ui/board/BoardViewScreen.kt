@@ -16,6 +16,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.*
@@ -37,7 +38,8 @@ import androidx.compose.foundation.layout.Column as ComposeColumn
 fun BoardViewScreen(
     boardId: Int,
     viewModel: BoardViewModel = viewModel(factory = AppViewModelProvider.Factory),
-    onAddTaskClick: (Int) -> Unit
+    onAddTaskClick: (Int) -> Unit,
+    onNavigateBack: () -> Unit
 ) {
     val board by viewModel.getBoard(boardId).collectAsState(initial = null)
     val columns by viewModel.getColumnsForBoard(boardId).collectAsState(initial = emptyList())
@@ -45,7 +47,14 @@ fun BoardViewScreen(
     var name by remember { mutableStateOf("") }
 
     Scaffold(
-        topBar = { TopAppBar(title = { Text(board?.title ?: "Loading...") }) }
+        topBar = {
+            TopAppBar(
+                title = { Text(board?.title ?: "Loading...") },
+                navigationIcon = {
+                    IconButton(onClick = onNavigateBack) {
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                    }
+                }) }
     ) { padding ->
         LazyRow(
             modifier = Modifier.padding(padding).fillMaxSize(),

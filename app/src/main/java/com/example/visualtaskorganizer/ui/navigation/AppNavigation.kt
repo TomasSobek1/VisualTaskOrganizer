@@ -28,7 +28,8 @@ fun AppNavigation() {
             val boardId = backStackEntry.arguments?.getInt("boardId") ?: 1
             BoardViewScreen(
                 boardId = boardId,
-                onAddTaskClick = { columnId -> navController.navigate("add_task/$columnId") }
+                onAddTaskClick = { columnId -> navController.navigate("add_task/$columnId") },
+                onNavigateBack = { navController.popBackStack() }
             )
         }
 

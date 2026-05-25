@@ -34,9 +34,15 @@ class BoardViewModel(
 
     val allBoards: Flow<List<Board>> = boardRepository.getAllBoardsStream()
 
-    fun addBoard(title: String) {
+    fun addBoard(title: String, color: Int) {
         viewModelScope.launch {
-            boardRepository.insertBoard(Board(title = title, colorTheme = 0))
+            boardRepository.insertBoard(Board(title = title, colorTheme = color))
+        }
+    }
+
+    fun deleteBoard(board: Board) {
+        viewModelScope.launch {
+            boardRepository.deleteBoard(board)
         }
     }
     fun addTask(task: Task) {
