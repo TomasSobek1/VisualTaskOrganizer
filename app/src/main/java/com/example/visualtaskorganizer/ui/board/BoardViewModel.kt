@@ -9,10 +9,7 @@ import com.example.visualtaskorganizer.model.Column as EntityColumn
 import com.example.visualtaskorganizer.model.Board
 import com.example.visualtaskorganizer.model.Task
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class BoardViewModel(
@@ -64,16 +61,9 @@ class BoardViewModel(
         }
     }
 
-    val boardList: StateFlow<List<Board>> = boardRepository.getAllBoardsStream()
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = emptyList()
-        )
-
-    fun addBoard(title: String, colorTheme: Int) {
+    fun addTask(task: Task) {
         viewModelScope.launch {
-            boardRepository.insertBoard(Board(title = title, colorTheme = colorTheme))
+            taskRepository.insertTask(task)
         }
     }
 
@@ -83,13 +73,6 @@ class BoardViewModel(
 
     fun getTasksForColumn(columnId: Int): Flow<List<Task>> {
         return taskRepository.getTasksForColumn(columnId)
-    }
-
-    fun moveTaskToColumn(task: Task, newColumnId: Int) {
-        viewModelScope.launch {
-            val updatedTask = task.copy(columnId = newColumnId)
-            taskRepository.updateTask(updatedTask)
-        }
     }
 
     fun updateTaskColumn(taskId: Int, newColumnId: Int) {

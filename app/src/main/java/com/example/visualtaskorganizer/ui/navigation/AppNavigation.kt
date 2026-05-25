@@ -5,16 +5,24 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.visualtaskorganizer.ui.board.BoardViewScreen
+import com.example.visualtaskorganizer.ui.board.AddTaskScreen
 
 @Composable
 fun AppNavigation() {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = "board_view/1") {
+        composable("add_task/{columnId}") { backStackEntry ->
+            val columnId = backStackEntry.arguments?.getString("columnId")?.toInt() ?: 1
+            AddTaskScreen(
+                columnId = columnId,
+                onNavigateBack = { navController.popBackStack() }
+            )
+        }
         composable("board_view/{boardId}") { backStackEntry ->
             val boardId = backStackEntry.arguments?.getString("boardId")?.toInt() ?: 1
             BoardViewScreen(
                 boardId = boardId,
-                onAddTaskClick = { /* TODO */ }
+                onAddTaskClick = { navController.navigate("add_task/1") }
             )
         }
     }
