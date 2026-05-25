@@ -26,10 +26,12 @@ import androidx.compose.ui.platform.LocalLocale
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TaskCard(task: Task, onDelete: () -> Unit) {
+    // Formátovanie dátumu
     val dateFormatter = SimpleDateFormat("MMM dd", LocalLocale.current.platformLocale)
     val startDateStr = task.startDate?.let { dateFormatter.format(Date(it)) } ?: "---"
     val deadlineStr = task.deadline?.let { dateFormatter.format(Date(it)) } ?: "---"
 
+    // Priorita - farby
     val priorityColor = when (task.priority) {
         1 -> Color(0xFF4CAF50)
         2 -> Color(0xFFFFC107)
@@ -52,6 +54,7 @@ fun TaskCard(task: Task, onDelete: () -> Unit) {
     ) {
         Box(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
 
+            // Indikátor priority
             Box(
                 modifier = Modifier
                     .size(12.dp)
@@ -64,8 +67,7 @@ fun TaskCard(task: Task, onDelete: () -> Unit) {
                 Text(
                     text = task.title,
                     style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurface
+                    fontWeight = FontWeight.Bold
                 )
 
                 if (task.description.isNotEmpty()) {
@@ -94,6 +96,7 @@ fun TaskCard(task: Task, onDelete: () -> Unit) {
                     DateColumn(title = "Start", date = startDateStr)
                     DateColumn(title = "Deadline", date = deadlineStr)
                 }
+
                 IconButton(
                     onClick = onDelete,
                     modifier = Modifier.align(Alignment.End).size(24.dp)
@@ -104,6 +107,7 @@ fun TaskCard(task: Task, onDelete: () -> Unit) {
         }
     }
 }
+
 @Composable
 fun DateColumn(title: String, date: String) {
     Column {

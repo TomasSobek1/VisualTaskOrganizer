@@ -6,6 +6,7 @@ import com.example.visualtaskorganizer.data.AppDataContainer
 
 class VisualTaskOrganizerApplication : Application() {
 
+    // Dependency Injection kontajner
     lateinit var container: AppContainer
 
     override fun onCreate() {
