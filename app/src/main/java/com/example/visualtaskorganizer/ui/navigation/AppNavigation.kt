@@ -14,7 +14,7 @@ fun AppNavigation() {
             val boardId = backStackEntry.arguments?.getString("boardId")?.toInt() ?: 1
             BoardViewScreen(
                 boardId = boardId,
-                onAddTaskClick = { /* Akcia po kliknutí na FAB */ }
+                onAddTaskClick = { /* TODO */ }
             )
         }
     }
