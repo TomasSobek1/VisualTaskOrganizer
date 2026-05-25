@@ -5,6 +5,8 @@ import kotlinx.coroutines.flow.Flow
 
 interface BoardRepository {
     fun getAllBoardsStream(): Flow<List<Board>>
+
+    fun getBoardById(id: Int): Flow<Board?>
     suspend fun insertBoard(board: Board)
     suspend fun deleteBoard(board: Board)
 }

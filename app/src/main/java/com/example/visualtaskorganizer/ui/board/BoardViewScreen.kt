@@ -39,12 +39,13 @@ fun BoardViewScreen(
     viewModel: BoardViewModel = viewModel(factory = AppViewModelProvider.Factory),
     onAddTaskClick: (Int) -> Unit
 ) {
+    val board by viewModel.getBoard(boardId).collectAsState(initial = null)
     val columns by viewModel.getColumnsForBoard(boardId).collectAsState(initial = emptyList())
     var showDialog by remember { mutableStateOf(false) }
     var name by remember { mutableStateOf("") }
 
     Scaffold(
-        topBar = { TopAppBar(title = { Text("Board Name") }) }
+        topBar = { TopAppBar(title = { Text(board?.title ?: "Loading...") }) }
     ) { padding ->
         LazyRow(
             modifier = Modifier.padding(padding).fillMaxSize(),
@@ -70,7 +71,7 @@ fun BoardViewScreen(
             text = { OutlinedTextField(value = name, onValueChange = { name = it }, singleLine = true) },
             confirmButton = {
                 TextButton(onClick = {
-                    if (name.isNotBlank()) viewModel.addColumn(name)
+                    if (name.isNotBlank()) viewModel.addColumn(boardId, name)
                     name = ""; showDialog = false
                 }) { Text("Add") }
             },
@@ -96,7 +97,7 @@ fun ColumnComponent(
                 val taskId = clipData.getItemAt(0).text.toString().toIntOrNull()
 
                 if (taskId != null) {
-                    viewModel.updateTaskColumn(taskId, column.columnId)
+                    viewModel.updateTaskColumn(taskId, column.columnId, column.boardId)
                     return true
                 }
                 return false

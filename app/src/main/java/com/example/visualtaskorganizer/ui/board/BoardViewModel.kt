@@ -24,15 +24,21 @@ class BoardViewModel(
             val boards = boardRepository.getAllBoardsStream().first()
             if (boards.isEmpty()) {
                 boardRepository.insertBoard(Board(title = "Mobile App Redesign", colorTheme = 0))
-
-                val boardId = 1
-                columnRepository.insertColumn(EntityColumn(title = "To Do", boardId = boardId, orderIndex = 0))
-                columnRepository.insertColumn(EntityColumn(title = "In Progress", boardId = boardId, orderIndex = 1))
-                columnRepository.insertColumn(EntityColumn(title = "Done", boardId = boardId, orderIndex = 1))
             }
         }
     }
 
+    fun getBoard(boardId: Int): Flow<Board?> {
+        return boardRepository.getBoardById(boardId)
+    }
+
+    val allBoards: Flow<List<Board>> = boardRepository.getAllBoardsStream()
+
+    fun addBoard(title: String) {
+        viewModelScope.launch {
+            boardRepository.insertBoard(Board(title = title, colorTheme = 0))
+        }
+    }
     fun addTask(task: Task) {
         viewModelScope.launch {
             taskRepository.insertTask(task)
@@ -47,12 +53,12 @@ class BoardViewModel(
         return taskRepository.getTasksForColumn(columnId)
     }
 
-    fun updateTaskColumn(taskId: Int, newColumnId: Int) {
+    fun updateTaskColumn(taskId: Int, newColumnId: Int, currentBoardId: Int) {
         viewModelScope.launch {
             taskRepository.getTasksForColumn(newColumnId).first().find { it.taskId == taskId }?.let { task ->
                 taskRepository.updateTask(task.copy(columnId = newColumnId))
             } ?: run {
-                val columns = columnRepository.getColumnsForBoard(1).first()
+                val columns = columnRepository.getColumnsForBoard(currentBoardId).first()
                 for (col in columns) {
                     val foundTask = taskRepository.getTasksForColumn(col.columnId).first().find { it.taskId == taskId }
                     if (foundTask != null) {
@@ -70,10 +76,9 @@ class BoardViewModel(
         }
     }
 
-    fun addColumn(name: String) {
+    fun addColumn(boardId: Int, name: String) {
         viewModelScope.launch {
-            //boardId sa bude menit, upravit nech orderIndex sa zvysuje po jednom
-            val newColumn = EntityColumn(title = name, boardId = 1, orderIndex = 0)
+            val newColumn = EntityColumn(title = name, boardId = boardId, orderIndex = 0)
             columnRepository.insertColumn(newColumn)
         }
     }

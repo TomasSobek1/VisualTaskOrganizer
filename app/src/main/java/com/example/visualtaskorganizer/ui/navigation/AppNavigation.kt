@@ -8,22 +8,17 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.visualtaskorganizer.ui.board.BoardViewScreen
 import com.example.visualtaskorganizer.ui.board.AddTaskScreen
+import com.example.visualtaskorganizer.ui.home.HomeScreen
 
 @Composable
 fun AppNavigation() {
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = "board_view/1") {
-
-        composable(
-            route = "add_task/{columnId}",
-            arguments = listOf(navArgument("columnId") { type = NavType.IntType })
-        ) { backStackEntry ->
-            val columnId = backStackEntry.arguments?.getInt("columnId") ?: 1
-            AddTaskScreen(
-                columnId = columnId,
-                onNavigateBack = { navController.popBackStack() }
-            )
+    NavHost(navController = navController, startDestination = "home_screen") {
+        composable("home_screen") {
+            HomeScreen(onBoardClick = { boardId ->
+                navController.navigate("board_view/$boardId")
+            })
         }
 
         composable(
@@ -34,6 +29,17 @@ fun AppNavigation() {
             BoardViewScreen(
                 boardId = boardId,
                 onAddTaskClick = { columnId -> navController.navigate("add_task/$columnId") }
+            )
+        }
+
+        composable(
+            route = "add_task/{columnId}",
+            arguments = listOf(navArgument("columnId") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val columnId = backStackEntry.arguments?.getInt("columnId") ?: 1
+            AddTaskScreen(
+                columnId = columnId,
+                onNavigateBack = { navController.popBackStack() }
             )
         }
     }
