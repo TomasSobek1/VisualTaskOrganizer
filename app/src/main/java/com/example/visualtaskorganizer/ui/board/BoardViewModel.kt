@@ -28,35 +28,7 @@ class BoardViewModel(
                 val boardId = 1
                 columnRepository.insertColumn(EntityColumn(title = "To Do", boardId = boardId, orderIndex = 0))
                 columnRepository.insertColumn(EntityColumn(title = "In Progress", boardId = boardId, orderIndex = 1))
-
-                val columnId1 = 1
-                val columnId2 = 2
-
-                taskRepository.insertTask(Task(
-                    taskId = 0,
-                    columnId = columnId1,
-                    title = "Create wireframes",
-                    description = "Design phase",
-                    startDate = 1714000000L,
-                    deadline = 1715000000L,
-                    priority = 1,
-                    colorTag = 0xFF0000,
-                    label = "Design",
-                    is_completed = false
-                ))
-
-                taskRepository.insertTask(Task(
-                    taskId = 0,
-                    columnId = columnId2,
-                    title = "Auth System",
-                    description = "Backend logic",
-                    startDate = 1714000000L,
-                    deadline = 1716000000L,
-                    priority = 1,
-                    colorTag = 0x00FF00,
-                    label = "Dev",
-                    is_completed = false
-                ))
+                columnRepository.insertColumn(EntityColumn(title = "Done", boardId = boardId, orderIndex = 1))
             }
         }
     }
@@ -89,6 +61,26 @@ class BoardViewModel(
                     }
                 }
             }
+        }
+    }
+
+    fun deleteTask(task: Task) {
+        viewModelScope.launch {
+            taskRepository.deleteTask(task)
+        }
+    }
+
+    fun addColumn(name: String) {
+        viewModelScope.launch {
+            //boardId sa bude menit, upravit nech orderIndex sa zvysuje po jednom
+            val newColumn = EntityColumn(title = name, boardId = 1, orderIndex = 0)
+            columnRepository.insertColumn(newColumn)
+        }
+    }
+
+    fun deleteColumn(column: EntityColumn) {
+        viewModelScope.launch {
+            columnRepository.deleteColumn(column)
         }
     }
 }

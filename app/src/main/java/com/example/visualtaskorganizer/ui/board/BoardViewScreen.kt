@@ -109,7 +109,12 @@ fun ColumnComponent(
                 contentPadding = PaddingValues(bottom = 16.dp)
             ) {
                 items(items = tasks, key = { it.taskId }) { task ->
-                    TaskCard(task = task)
+                    TaskCard(
+                        task = task,
+                        onDelete = {
+                            viewModel.deleteTask(task)
+                        }
+                    )
                 }
             }
         }

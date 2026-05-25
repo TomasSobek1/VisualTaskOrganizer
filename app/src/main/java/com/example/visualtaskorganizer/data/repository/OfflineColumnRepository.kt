@@ -13,4 +13,8 @@ class OfflineColumnRepository(private val columnDao: ColumnDao) : ColumnReposito
     override suspend fun insertColumn(column: Column) {
         columnDao.insertColumn(column)
     }
+
+    override suspend fun deleteColumn(column: Column) {
+        columnDao.deleteColumn(column)
+    }
 }

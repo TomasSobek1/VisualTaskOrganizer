@@ -42,9 +42,14 @@ fun AddTaskScreen(
     var expandedPriority by remember { mutableStateOf(false) }
 
     val taskColors = listOf(
-        Color(0xFFE3F2FD), Color(0xFFF3E5F5), Color(0xFFE8EAF6),
-        Color(0xFFFFEBEE), Color(0xFFFCE4EC), Color(0xFFE0F2F1),
-        Color(0xFFFFF3E0), Color(0xFFFFF9C4)
+        Color(0xFFE57373),
+        Color(0xFF81C784),
+        Color(0xFF64B5F6),
+        Color(0xFFBA68C8),
+        Color(0xFFFFB74D),
+        Color(0xFF4DB6AC),
+        Color(0xFFFFF176),
+        Color(0xFF9575CD)
     )
     var selectedColor by remember { mutableStateOf(taskColors[0]) }
 

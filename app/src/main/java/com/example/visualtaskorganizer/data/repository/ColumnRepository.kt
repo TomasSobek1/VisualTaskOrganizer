@@ -7,4 +7,6 @@ interface ColumnRepository {
     fun getColumnsForBoard(boardId: Int): Flow<List<Column>>
 
     suspend fun insertColumn(column: Column)
+
+    suspend fun deleteColumn(column: Column)
 }

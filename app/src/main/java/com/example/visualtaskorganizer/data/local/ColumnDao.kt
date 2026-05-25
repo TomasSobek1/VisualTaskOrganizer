@@ -11,4 +11,7 @@ interface ColumnDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertColumn(column: Column)
+
+    @Delete
+    suspend fun deleteColumn(column: Column)
 }
